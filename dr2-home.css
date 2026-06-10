@@ -99,3 +99,7 @@ html.dr2-ready .dr2-line-in,html:not(.dr2-js) .dr2-line-in{transform:translateY(
 /* micro-interactions */
 .dr2-btn{will-change:transform}
 .dr2-cover{will-change:transform}
+/* footer2 (Webflow-scoped class) — grain + link hover */
+.dr2-footer2::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.dr2-foot-link2:hover{border-color:#1a1a1a}
+.dr2-footer2 .dr2-foot-mark{overflow:hidden}
