@@ -106,3 +106,5 @@ html.dr2-ready .dr2-line-in,html:not(.dr2-js) .dr2-line-in{transform:translateY(
 /* wordmark crop: descenders kiss the edge, all legible */
 .dr2-foot-mark-img{transform:translateY(4.5%)}
 .dr2-foot-mark{margin-bottom:-0.8vw}
+.dr2-foot-mark-img{transform:translateY(4.5%)!important}
+.dr2-foot-mark{margin-bottom:-0.8vw!important}
