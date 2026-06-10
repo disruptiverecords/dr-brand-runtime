@@ -27,3 +27,17 @@ html.dr2-js [data-reveal].dr2-in{opacity:1;transform:translateY(0)}
 .dr2-l-dot{position:absolute;top:-2.5px;left:0;width:6px;height:6px;border-radius:50%;background:#ceff00;transition:left .12s linear}
 #dr2-loader.dr2-l-done{transform:translateY(-101%)}
 @media (prefers-reduced-motion:reduce){html.dr2-js [data-reveal]{opacity:1;transform:none}}
+
+/* — v2: imagery, texture, depth — */
+.dr2-logo-img{height:24px;width:auto;display:block}
+.dr2-hero::before{content:'';position:absolute;right:-10vw;top:50%;transform:translateY(-50%);width:60vw;height:60vw;border-radius:50%;background:radial-gradient(closest-side,rgba(237,234,228,.07),rgba(26,26,26,0) 70%);pointer-events:none}
+.dr2-hero::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.dr2-hero-symbol video{width:100%;height:100%;object-fit:contain;display:block}
+.dr2-hero-inner{z-index:2}
+.dr2-cover{aspect-ratio:1/1}
+.dr2-cover-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transform:scale(1.001);transition:transform .8s cubic-bezier(.22,.61,.36,1)}
+.dr2-card:hover .dr2-cover-img{transform:scale(1.045)}
+.dr2-cover::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.dr2-foot-img{height:104px;width:auto;display:block;opacity:.92}
+.dr2-manifesto{position:relative;overflow:hidden}
+.dr2-manifesto::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;opacity:.04;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}

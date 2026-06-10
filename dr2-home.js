@@ -30,16 +30,27 @@
       });
     }
     var hs = document.getElementById("dr2-hero-symbol");
-    if (hs) { hs.style.color = "#edeae4"; hs.appendChild(sym({ mode: show ? "ambient" : "draw", hover: "", stroke: "2.8" })); }
+    if (hs) {
+      hs.style.color = "#edeae4";
+      var hv = hs.querySelector("video");
+      if (hv) hv.remove();
+      hs.appendChild(sym({ mode: show ? "ambient" : "draw", hover: "", stroke: "2.8" }));
+    }
     var covers = document.querySelectorAll("[data-dr-cover]");
     for (var i = 0; i < covers.length; i++) {
+      if (covers[i].querySelector("img")) continue;
       var w = document.createElement("div");
       w.style.cssText = "width:62%;height:62%;opacity:.3;color:#edeae4";
       w.appendChild(sym({ mode: "ambient", stroke: "3.4", speed: String(0.5 + i * 0.18), amp: "3" }));
       covers[i].appendChild(w);
     }
     var fs = document.getElementById("dr2-footer-symbol");
-    if (fs) { fs.style.color = "#edeae4"; fs.appendChild(sym({ mode: "ambient", hover: "", stroke: "3.2" })); }
+    if (fs) {
+      fs.style.color = "#edeae4";
+      var fi = fs.querySelector("img");
+      if (fi) fi.remove();
+      fs.appendChild(sym({ mode: "ambient", hover: "", stroke: "3.2" }));
+    }
     var rev = [].slice.call(document.querySelectorAll("[data-reveal]"));
     if (REDUCE || !("IntersectionObserver" in window)) {
       rev.forEach(function (e) { e.classList.add("dr2-in"); });
