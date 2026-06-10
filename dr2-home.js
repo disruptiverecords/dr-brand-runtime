@@ -26,9 +26,10 @@
         cnt.textContent = String(Math.round(e * 100)).padStart(3, "0");
         dot.style.left = (e * 100) + "%";
         if (p < 1) requestAnimationFrame(tick);
-        else { loader.classList.add("dr2-l-done"); setTimeout(function () { loader.remove(); }, 900); }
+        else { loader.classList.add("dr2-l-done"); document.documentElement.classList.add("dr2-ready"); setTimeout(function () { loader.remove(); }, 900); }
       });
     }
+    if (!show) document.documentElement.classList.add("dr2-ready");
     var hs = document.getElementById("dr2-hero-symbol");
     if (hs) {
       hs.style.color = "#edeae4";
@@ -68,11 +69,41 @@
       }, { threshold: 0.15 });
       rev.forEach(function (e) { io.observe(e); });
     }
+    if (!REDUCE) {
+      [].forEach.call(document.querySelectorAll(".dr2-btn"), function (b) {
+        b.addEventListener("pointermove", function (e) {
+          var r = b.getBoundingClientRect();
+          var x = (e.clientX - r.left - r.width / 2) / r.width;
+          var y = (e.clientY - r.top - r.height / 2) / r.height;
+          b.style.transform = "translate(" + (x * 8).toFixed(1) + "px," + (y * 6).toFixed(1) + "px)";
+        });
+        b.addEventListener("pointerleave", function () { b.style.transform = ""; });
+      });
+      [].forEach.call(document.querySelectorAll(".dr2-card"), function (c) {
+        var cov = c.querySelector(".dr2-cover");
+        if (!cov) return;
+        c.addEventListener("pointermove", function (e) {
+          var r = c.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width - 0.5;
+          var y = (e.clientY - r.top) / r.height - 0.5;
+          cov.style.transform = "perspective(900px) rotateX(" + (-y * 5).toFixed(2) + "deg) rotateY(" + (x * 5).toFixed(2) + "deg) translateY(-4px)";
+        });
+        c.addEventListener("pointerleave", function () { cov.style.transform = ""; });
+      });
+    }
     var nav = document.getElementById("dr2-nav");
-    var hero = document.querySelector(".dr2-hero");
+    var lastY = 0;
     function onScroll() {
-      if (nav) nav.classList.toggle("dr2-scrolled", scrollY > 8);
-      if (hs) hs.style.transform = "translateY(calc(-50% + " + (scrollY * 0.08) + "px))";
+      if (nav) {
+        nav.classList.toggle("dr2-scrolled", scrollY > 8);
+        nav.classList.toggle("dr2-nav-hidden", scrollY > 160 && scrollY > lastY);
+        lastY = scrollY;
+      }
+      if (hs) {
+        hs.style.transform = "translateY(calc(-50% + " + (scrollY * 0.08) + "px))";
+        var c2 = hs.querySelector("dr-symbol");
+        if (c2 && !REDUCE) c2._twist = Math.min(44, scrollY * 0.045);
+      }
     }
     addEventListener("scroll", onScroll, { passive: true });
     onScroll();
