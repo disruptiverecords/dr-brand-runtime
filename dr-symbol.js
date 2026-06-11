@@ -180,7 +180,7 @@
     var u = (dx * c + dy * s) / e._rx, v = (-dx * s + dy * c) / e._ry;
     var r = Math.sqrt(u * u + v * v);
     var d = Math.abs(r - 1) * (e._rx + e._ry) / 2;   /* ≈ px distance to ring */
-    return Math.exp(-(d * d) / (2 * 80 * 80));
+    return Math.exp(-(d * d) / (2 * 52 * 52));
   };
 
   DRSymbol.prototype._loop = function () {
@@ -200,7 +200,7 @@
           var tw = self._twist * e._w;
           /* pointer proximity: nearby rings rotate aside and thicken */
           var g = self._ringField(e);
-          var rot = g * 7 * (0.5 + e._w);
+          var rot = g * 11 * (0.45 + e._w);
           /* click pulse: an impulse traveling inward through the stack */
           var pulse = 0;
           for (var k = self._pulses.length - 1; k >= 0; k--) {
@@ -211,7 +211,7 @@
           e.setAttribute("transform",
             "rotate(" + (e._a + wave + tw + rot + pulse) + " " + e._cx + " " + e._cy + ")");
           if (self._hover)
-            e.style.strokeWidth = String(self._sw * (1 + 0.9 * g));
+            e.style.strokeWidth = String(self._sw * (1 + 1.25 * g));
         }
       }
       requestAnimationFrame(frame);
@@ -242,12 +242,9 @@
       var ny = (ev.clientY - r.top) / r.height;
       self._px = nx * SIZE; self._py = ny * SIZE;   /* viewBox coords for the ring field */
       self._hoverActive = true;
-      self._svg.style.transform =
-        "perspective(900px) rotateY(" + ((nx - 0.5) * 9) + "deg) rotateX(" + (-(ny - 0.5) * 9) + "deg)";
     });
     this.addEventListener("pointerleave", function () {
       self._hoverActive = false;
-      self._svg.style.transform = "";
       for (var i = 0; i < N; i++) self._rings[i].style.strokeWidth = "";
     });
     this.addEventListener("pointerdown", function () {
@@ -268,9 +265,9 @@
       var e = this._rings[i];
       var g = this._ringField(e);
       e.style.opacity = "";
-      e.style.strokeWidth = String(this._sw * (1 + 0.9 * g));
+      e.style.strokeWidth = String(this._sw * (1 + 1.25 * g));
       e.setAttribute("transform",
-        "rotate(" + (e._a + g * 7 * (0.5 + e._w)) + " " + e._cx + " " + e._cy + ")");
+        "rotate(" + (e._a + g * 11 * (0.45 + e._w)) + " " + e._cx + " " + e._cy + ")");
     }
   };
   DRSymbol.prototype.setTwist = function (deg) {

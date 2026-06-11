@@ -136,16 +136,8 @@
         r.addEventListener("pointerenter", function () { r.classList.add("on"); });
       });
     }
-    var nav = document.getElementById("dr2-nav");
-    var lastY = 0;
     function onScroll() {
-      if (nav) {
-        nav.classList.toggle("dr2-scrolled", scrollY > 8);
-        nav.classList.toggle("dr2-nav-hidden", scrollY > 160 && scrollY > lastY);
-        lastY = scrollY;
-      }
       if (hs) {
-        hs.style.transform = "translateY(calc(-50% + " + (scrollY * 0.08) + "px))";
         var c2 = hs.querySelector("dr-symbol");
         if (c2 && !REDUCE) c2._twist = Math.min(44, scrollY * 0.045);
       }
