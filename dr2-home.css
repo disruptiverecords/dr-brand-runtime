@@ -108,3 +108,22 @@ html.dr2-ready .dr2-line-in,html:not(.dr2-js) .dr2-line-in{transform:translateY(
 .dr2-foot-mark{margin-bottom:-0.8vw}
 .dr2-foot-mark-img{transform:translateY(4.5%)!important}
 .dr2-foot-mark{margin-bottom:-0.8vw!important}
+
+/* ============ v4: company entity ============ */
+.dr2-hero-vid{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:.55;filter:saturate(.92)}
+.dr2-hero-scrim{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(26,26,26,.5) 0%,rgba(26,26,26,.22) 48%,#1a1a1a 97%)}
+.dr2-hero-symbol{z-index:2}
+.dr2-hero .dr2-container{position:relative;z-index:2}
+/* counter: lime plus pop */
+.dr2-count-plus{display:inline-block;color:#ceff00;opacity:0;transform:scale(.4) translateY(8px);transition:opacity .5s cubic-bezier(.22,.61,.36,1),transform .5s cubic-bezier(.22,.61,.36,1)}
+.dr2-count-plus.on{opacity:1;transform:none}
+/* graph (JS-injected svg) */
+#dr2-graph{margin-top:72px}
+#dr2-graph svg{width:100%;height:auto;display:block;overflow:visible}
+.dr2-graph-line{fill:none;stroke:#edeae4;stroke-width:1.6}
+.dr2-graph-base{fill:none;stroke:#2a2a28;stroke-width:1}
+.dr2-graph-dot{fill:#ceff00;opacity:0;transform:scale(.3);transform-origin:center;transform-box:fill-box;transition:opacity .5s ease,transform .5s cubic-bezier(.22,.61,.36,1)}
+#dr2-graph.on .dr2-graph-dot{opacity:1;transform:scale(1)}
+.dr2-graph-tick{font-family:'DR Mono',monospace;font-size:9px;letter-spacing:.02em;fill:#5e5c56}
+.dr2-graph-cap{font-family:'DR Mono',monospace;font-size:9px;letter-spacing:.02em;fill:#76746e}
+@media (prefers-reduced-motion:reduce){.dr2-graph-line{stroke-dashoffset:0!important}}
