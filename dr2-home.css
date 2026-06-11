@@ -249,3 +249,9 @@ html.dr2-ready .dr2-line-in,html:not(.dr2-js) .dr2-line-in{transform:translateY(
 .dr2-hero .dr2-sub{margin-top:18px;max-width:54ch}
 .dr2-hero .dr2-cta-group{margin-top:30px}
 .dr2-hero .dr2-container{padding-top:80px;padding-bottom:90px}
+/* v8.2: bigger crisp symbol */
+.dr2-hero-sym2{width:min(400px,54vw)!important;height:min(400px,54vw)!important}
+.dr2-hero-sym2 svg{shape-rendering:geometricPrecision}
+.dr2-hero .dr2-container{padding-top:60px}
+.dr2-hero .dr2-eyebrow-row{margin-bottom:10px}
+.dr2-hero .dr2-display{font-size:clamp(38px,5.4vw,90px)!important}

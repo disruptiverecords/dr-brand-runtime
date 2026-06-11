@@ -101,7 +101,7 @@
       var cx = HALF + r[0] * SCALE, cy = HALF + r[1] * SCALE;
       var rx = r[2] * SCALE, ry = r[3] * SCALE;
       var e = el("ellipse", { cx: cx, cy: cy, rx: rx, ry: ry });
-      e._cx = cx; e._cy = cy; e._a = r[4];
+      e._cx = cx; e._cy = cy; e._a = r[4]; e._rx = rx; e._ry = ry;
       e._w = 1 - r[2];                       /* thin inner rings twist more */
       /* circumference via Ramanujan — avoids pathLength attr (broken on
          ellipses in Safari, which made the draw-on "just appear") */
@@ -185,11 +185,15 @@
 
   DRSymbol.prototype._loop = function () {
     var self = this;
+    self._ph = 0; self._lastNow = performance.now(); self._boost = 1;
     function frame(now) {
       if (self._dead) return;
       if (!self._frozen) {
-        var t = (now - self._t0) / 1000;
-        var hovBoost = self._hoverActive ? 1.5 : 1;
+        var dt = Math.min(0.1, (now - self._lastNow) / 1000);
+        self._lastNow = now;
+        var target = self._hoverActive ? 1.45 : 1;
+        self._boost += (target - self._boost) * Math.min(1, dt * 5);
+        self._ph += dt * self._speed * self._boost * 2 * Math.PI / 9;
         /* after a draw reveal, the ambient wave fades in over 1.2s — no pop */
         var ramp = (self._drawEnd) ? Math.min(1, (now - self._drawEnd) / 1200) : 1;
         for (var i = 0; i < N; i++) {
