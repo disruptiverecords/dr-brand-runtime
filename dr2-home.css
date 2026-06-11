@@ -149,3 +149,46 @@ html.dr2-ready .dr2-line-in,html:not(.dr2-js) .dr2-line-in{transform:translateY(
 .dr2-hero-vid{z-index:0}
 .dr2-hero-scrim{z-index:1}
 .dr2-hero::before,.dr2-hero::after{z-index:1}
+
+/* ============ v6: atmosphere, partners, subtle stats, full-bleed manifesto ============ */
+/* fixed gradient atmosphere — ported from disruptiverecords.nl (.ultra-gradient-wrapper-2) */
+.dr2-atmos{position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;overflow:hidden}
+.dr2-atmos-shapes{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.6;filter:blur(120px)}
+.dr2-ash{position:absolute;will-change:transform}
+.dr2-ash1{width:40vw;height:40vw;border-radius:50%;background:#99cfbf;opacity:.34;top:-6vw;right:6vw;animation:dr2-drift1 64s ease-in-out infinite alternate}
+.dr2-ash2{width:32vw;height:44vw;border-radius:8vw;background:#8d7965;opacity:.3;top:14vh;left:18vw;animation:dr2-drift2 76s ease-in-out infinite alternate}
+.dr2-ash3{width:13vw;height:42vw;border-radius:999px;background:#e5a630;opacity:.42;top:6vh;left:2vw;transform:rotate(18deg);animation:dr2-drift3 58s ease-in-out infinite alternate}
+@keyframes dr2-drift1{from{transform:translate(0,0) rotate(0)}to{transform:translate(-9vw,7vh) rotate(28deg)}}
+@keyframes dr2-drift2{from{transform:translate(0,0) rotate(0)}to{transform:translate(10vw,-6vh) rotate(-16deg)}}
+@keyframes dr2-drift3{from{transform:translate(0,0) rotate(14deg)}to{transform:translate(7vw,9vh) rotate(40deg)}}
+@media (prefers-reduced-motion:reduce){.dr2-ash{animation:none}}
+/* fixed living grain — same asset as the main site */
+.dr2-grainfix{position:fixed;top:0;left:0;right:0;bottom:0;z-index:99;pointer-events:none;background-image:url("https://cdn.prod.website-files.com/646c73b8b95e3cd58e64f18d/646c73b8b95e3cd58e64f208_grain-slow.gif");opacity:.04;mix-blend-mode:soft-light;filter:contrast(2)}
+/* sections sit above the atmosphere; hero is transparent so it glows through */
+.dr2-marquee,.dr2-stats-sec,.dr2-acts,.dr2-partners,.dr2-labels,.dr2-light,.dr2-studio,.dr2-catalog,.dr2-manifesto,.dr2-footer2{position:relative;z-index:1}
+.dr2-hero{background:transparent!important;z-index:1}
+.dr2-hero::before,.dr2-hero::after{content:none!important}
+/* bolder hero presence */
+.dr2-display{font-size:clamp(52px,8.4vw,150px)!important}
+/* animated conic border glow on ghost buttons — ported from the live site */
+@property --dr2a{syntax:'<angle>';initial-value:0deg;inherits:false}
+.dr2-btn-ghost{position:relative}
+.dr2-btn-ghost::before{content:'';position:absolute;top:-1px;left:-1px;right:-1px;bottom:-1px;border-radius:999px;padding:1px;background:conic-gradient(from var(--dr2a),rgba(237,234,228,.65) 0deg,rgba(237,234,228,0) 70deg,rgba(237,234,228,0) 290deg,rgba(237,234,228,.65) 360deg);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:dr2-bturn 5s linear infinite;pointer-events:none}
+@keyframes dr2-bturn{to{--dr2a:360deg}}
+@media (prefers-reduced-motion:reduce){.dr2-btn-ghost::before{animation:none}}
+/* subtle stats */
+.dr2-stats-line{font-family:'DR Writer',Georgia,serif;font-weight:300;font-size:clamp(26px,3vw,44px);line-height:1.3;color:#edeae4;max-width:21ch;margin:64px 0 0}
+.dr2-stats-line em{font-style:italic}
+.dr2-sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:88px}
+.dr2-scell{border-top:1px solid #2a2a28;padding-top:20px;display:flex;flex-direction:column;gap:10px}
+.dr2-sval{font-family:'DR Haas',sans-serif;font-weight:400;font-size:clamp(28px,2.8vw,42px);color:#edeae4}
+.dr2-slab{font-family:'DR Mono',monospace;font-size:10px;letter-spacing:.02em;text-transform:uppercase;color:#76746e}
+@media (max-width:767px){.dr2-sgrid{grid-template-columns:repeat(2,1fr)}}
+/* partners grid */
+.dr2-pgrid img{width:20px;height:20px;display:block;opacity:.92}
+.dr2-pcell:hover img{opacity:1}
+/* manifesto: full-bleed image block */
+.dr2-manifesto{background:linear-gradient(rgba(22,24,28,.78),rgba(22,24,28,.84)),url("https://cdn.jsdelivr.net/gh/disruptiverecords/dr-brand-runtime@c3e6dbf/art/dr025.jpg") center/cover no-repeat!important}
+.dr2-man-idx{display:flex;justify-content:space-between;align-items:flex-end;margin-top:110px}
+.dr2-man-no{font-family:'DR Mono',monospace;font-size:clamp(56px,9vw,130px);line-height:.9;color:rgba(237,234,228,.26)}
+.dr2-man-lab{font-family:'DR Mono',monospace;font-size:10px;letter-spacing:.02em;text-transform:uppercase;color:rgba(237,234,228,.55)}

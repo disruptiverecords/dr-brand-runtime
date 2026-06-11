@@ -92,6 +92,24 @@
       });
     }
 
+
+    /* v6: atmosphere + grain layers (ported from main site), partner icons */
+    var atmos = document.createElement("div");
+    atmos.className = "dr2-atmos";
+    atmos.innerHTML = '<div class="dr2-atmos-shapes"><div class="dr2-ash dr2-ash1"></div><div class="dr2-ash dr2-ash2"></div><div class="dr2-ash dr2-ash3"></div></div>';
+    document.body.insertBefore(atmos, document.body.firstChild);
+    var grainFix = document.createElement("div");
+    grainFix.className = "dr2-grainfix";
+    document.body.appendChild(grainFix);
+    [].forEach.call(document.querySelectorAll(".dr2-pcell"), function (c) {
+      var ic = c.getAttribute("data-icon");
+      if (!ic) return;
+      var im = document.createElement("img");
+      im.src = "https://cdn.simpleicons.org/" + ic + "/edeae4";
+      im.alt = "";
+      im.loading = "lazy";
+      c.insertBefore(im, c.firstChild);
+    });
     /* ---- v4: company entity ---- */
     /* 1B counter */
     var cnt = document.getElementById("dr2-count-num");
