@@ -242,3 +242,10 @@ html.dr2-ready .dr2-line-in,html:not(.dr2-js) .dr2-line-in{transform:translateY(
 .dr2-hero .dr2-eyebrow-row{justify-content:center}
 /* old top-bar nav neutralized if remnants */
 .dr2-nav{display:none!important}
+/* v8.1: hero fits one viewport */
+.dr2-hero-sym2{width:min(300px,44vw)!important;height:min(300px,44vw)!important;max-width:none!important;max-height:none!important}
+.dr2-hero .dr2-display{font-size:clamp(40px,5.8vw,96px)!important;line-height:1.04}
+.dr2-hero .dr2-eyebrow-row{margin-bottom:14px}
+.dr2-hero .dr2-sub{margin-top:18px;max-width:54ch}
+.dr2-hero .dr2-cta-group{margin-top:30px}
+.dr2-hero .dr2-container{padding-top:80px;padding-bottom:90px}
