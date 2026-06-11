@@ -93,6 +93,20 @@
     }
 
 
+
+    /* v7: glass catalog chips on release covers */
+    [].forEach.call(document.querySelectorAll(".dr2-card"), function (card) {
+      var cov = card.querySelector(".dr2-cover");
+      var meta = card.querySelector(".dr2-rel-meta");
+      if (!cov || !meta || cov.querySelector(".dr2-cover-chip")) return;
+      var parts = meta.textContent.split("\u00b7");
+      var no = parts[parts.length - 1] ? parts[parts.length - 1].trim() : "";
+      if (!no) return;
+      var chip = document.createElement("span");
+      chip.className = "dr2-cover-chip";
+      chip.textContent = no + " \u00b7 2026";
+      cov.appendChild(chip);
+    });
     /* v6: atmosphere + grain layers (ported from main site), partner icons */
     var atmos = document.createElement("div");
     atmos.className = "dr2-atmos";

@@ -195,3 +195,32 @@ html.dr2-ready .dr2-line-in,html:not(.dr2-js) .dr2-line-in{transform:translateY(
 /* manifesto: abstract art, zoomed past its typography, heavier veil */
 .dr2-manifesto{background:linear-gradient(rgba(22,24,28,.84),rgba(22,24,28,.9)),url("https://cdn.jsdelivr.net/gh/disruptiverecords/dr-brand-runtime@c3e6dbf/art/dr022.jpg") center 38%/150% no-repeat!important}
 .dr2-manifesto{background:linear-gradient(rgba(22,24,28,.84),rgba(22,24,28,.9)),url("https://cdn.jsdelivr.net/gh/disruptiverecords/dr-brand-runtime@c3e6dbf/art/dr022.jpg") 24% 30%/220% no-repeat!important}
+
+/* ============ v7: DisruptiveOS glass language ============ */
+.dr2-glass{position:absolute;background:rgba(18,19,18,.56);backdrop-filter:blur(32px) saturate(1.15);-webkit-backdrop-filter:blur(32px) saturate(1.15);border-radius:24px;box-shadow:0 28px 64px -12px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.10);padding:26px;color:#f5f5f4}
+.dr2-gc-lab{display:block;font-family:'DR Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,245,244,.55);margin-bottom:12px}
+.dr2-gc-quote{font-family:'DR Writer',Georgia,serif;font-weight:300;font-style:italic;font-size:17px;line-height:1.5;color:rgba(245,245,244,.92);margin:0}
+.dr2-gc-gear{display:flex;flex-direction:column}
+.dr2-gc-gear span{font-family:'DR Mono',monospace;font-size:10px;letter-spacing:.02em;text-transform:uppercase;color:rgba(245,245,244,.78);padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.dr2-gc-gear span:last-child{border-bottom:none}
+.dr2-gc-loc{font-family:'DR Mono',monospace;font-size:10px;letter-spacing:.03em;text-transform:uppercase;color:rgba(245,245,244,.85)}
+/* studio v2 — panel + photography + floating glass */
+.dr2-studio2{position:relative;z-index:1;background:#11140f}
+.dr2-st2-grid{display:grid;grid-template-columns:minmax(360px,38%) 1fr;min-height:94vh}
+.dr2-st2-panel{background:#2a322c;padding:clamp(56px,7vw,110px) clamp(32px,4vw,72px);display:flex;flex-direction:column;justify-content:center;gap:28px;position:relative}
+.dr2-st2-eyebrow{color:#aab5a6}
+.dr2-st2-title{font-family:'DR Writer',Georgia,serif;font-weight:300;font-size:clamp(40px,4.6vw,76px);line-height:1.04;color:#edeae4;margin:0}
+.dr2-st2-copy{font-family:'DR Haas',sans-serif;font-weight:300;font-size:15px;line-height:1.75;color:#b9c1b4;max-width:42ch;margin:0}
+.dr2-st2-cap{position:absolute;bottom:32px;left:clamp(32px,4vw,72px);font-family:'DR Mono',monospace;font-size:10px;letter-spacing:.03em;text-transform:uppercase;color:rgba(237,234,228,.4)}
+.dr2-btn-light{background:#edeae4!important;color:#1a1a1a!important;border-color:#edeae4!important}
+.dr2-st2-photo{position:relative;overflow:hidden;min-height:60vh}
+.dr2-st2-photo>img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.dr2-st2-photo::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(140deg,rgba(17,20,15,.34),rgba(17,20,15,0) 45%,rgba(17,20,15,.42) 100%);pointer-events:none}
+.dr2-gc1{top:13%;left:7%;width:min(320px,42%);z-index:2}
+.dr2-gc2{bottom:11%;right:7%;width:min(290px,40%);z-index:2}
+.dr2-gc3{top:9%;right:8%;display:flex;align-items:center;gap:10px;padding:14px 20px;border-radius:999px;z-index:2}
+@media (max-width:900px){.dr2-st2-grid{grid-template-columns:1fr}.dr2-st2-photo{min-height:88vh}.dr2-gc1{left:6%;top:8%;width:74%}.dr2-gc2{right:6%;bottom:8%;width:74%}.dr2-gc3{display:none}}
+/* glass nav on scroll */
+.dr2-nav.dr2-scrolled{background:rgba(20,20,20,.55)!important;backdrop-filter:blur(28px) saturate(1.1);-webkit-backdrop-filter:blur(28px) saturate(1.1);border-bottom:1px solid rgba(245,245,244,.08)}
+/* glass catalog chip on release covers (JS-injected) */
+.dr2-cover-chip{position:absolute;left:14px;bottom:14px;z-index:2;background:rgba(18,19,18,.5);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);padding:7px 14px;font-family:'DR Mono',monospace;font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:rgba(245,245,244,.9)}
