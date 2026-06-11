@@ -199,7 +199,7 @@
         for (var i = 0; i < N; i++) {
           var e = self._rings[i];
           var wave = self._flowOn
-            ? ramp * self._amp * Math.sin((t * self._speed * hovBoost * 2 * Math.PI) / 9 + i * 0.55)
+            ? ramp * self._amp * Math.sin(self._ph + i * 0.55)
             : 0;
           var tw = self._twist * e._w;
           /* pointer proximity: nearby rings rotate aside and thicken */
