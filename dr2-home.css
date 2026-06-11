@@ -127,3 +127,22 @@ html.dr2-ready .dr2-line-in,html:not(.dr2-js) .dr2-line-in{transform:translateY(
 .dr2-graph-tick{font-family:'DR Mono',monospace;font-size:9px;letter-spacing:.02em;fill:#5e5c56}
 .dr2-graph-cap{font-family:'DR Mono',monospace;font-size:9px;letter-spacing:.02em;fill:#76746e}
 @media (prefers-reduced-motion:reduce){.dr2-graph-line{stroke-dashoffset:0!important}}
+/* v4.1: scroll/hover states for entity sections */
+.dr2-act-desc{transform:translateY(8px)}
+.dr2-act-row.on .dr2-act-word{color:#edeae4;transform:translateX(10px)}
+.dr2-act-row.on .dr2-act-dot{opacity:1;transform:scale(1)}
+.dr2-act-row.on .dr2-act-desc{opacity:1;transform:translateY(0)}
+.dr2-act-dot{transform:scale(.4)}
+.dr2-label-arrow{transform:translateX(-8px)}
+.dr2-label-row:hover .dr2-label-arrow{opacity:1;transform:translateX(0)}
+.dr2-label-row.dr2-lr-dr:hover{background-color:#2c3038;padding-left:34px}
+.dr2-lr-dr:hover .dr2-label-name{color:#edeae4}
+.dr2-lr-dr:hover .dr2-label-tag{color:#8ca4af}
+.dr2-lr-dr:hover .dr2-label-arrow{color:#edeae4}
+.dr2-label-row.dr2-lr-ap:hover{background-color:#ffffff;padding-left:34px}
+.dr2-label-row.dr2-lr-mp:hover{background-color:#b9ad77;padding-left:34px}
+.dr2-ghost{-webkit-text-stroke:1px #cdc7b9;color:transparent}
+@supports not (-webkit-text-stroke: 1px #000){.dr2-ghost{color:rgba(26,26,26,.05)}}
+.dr2-studio-ph{aspect-ratio:16/10;background:#dad5c9}
+.dr2-studio-ph-b{aspect-ratio:4/3}
+.dr2-studio-ph img{width:100%;height:100%;object-fit:cover;display:block}
