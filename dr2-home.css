@@ -192,3 +192,5 @@ html.dr2-ready .dr2-line-in,html:not(.dr2-js) .dr2-line-in{transform:translateY(
 .dr2-man-idx{display:flex;justify-content:space-between;align-items:flex-end;margin-top:110px}
 .dr2-man-no{font-family:'DR Mono',monospace;font-size:clamp(56px,9vw,130px);line-height:.9;color:rgba(237,234,228,.26)}
 .dr2-man-lab{font-family:'DR Mono',monospace;font-size:10px;letter-spacing:.02em;text-transform:uppercase;color:rgba(237,234,228,.55)}
+/* manifesto: abstract art, zoomed past its typography, heavier veil */
+.dr2-manifesto{background:linear-gradient(rgba(22,24,28,.84),rgba(22,24,28,.9)),url("https://cdn.jsdelivr.net/gh/disruptiverecords/dr-brand-runtime@c3e6dbf/art/dr022.jpg") center 38%/150% no-repeat!important}
