@@ -60,6 +60,27 @@
   var REDUCED = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* The default box lives in a stylesheet rule, not in an inline style.
+     It used to be an inline `width:120px`, written once from a single
+     getComputedStyle read in connectedCallback. An element with no box at
+     upgrade time (hidden ancestor, stylesheet not yet applied,
+     content-visibility) got that inline width, and because an inline style
+     outranks any stylesheet it was pinned to 120px for the life of the page.
+     It never re-read its box, so revealing or resizing the container could
+     not undo it. As a plain element-selector rule injected at the top of
+     <head> it stays the lowest-priority thing in the cascade: any author
+     rule or inline width wins, at any time, with no measuring and no race. */
+  var BASE_CSS = "dr-symbol{display:inline-block;width:120px}";
+  var baseDone = false;
+  function ensureBaseStyle() {
+    if (baseDone || !document.head) return;
+    baseDone = true;
+    var s = document.createElement("style");
+    s.setAttribute("data-dr-symbol", "");
+    s.textContent = BASE_CSS;
+    document.head.insertBefore(s, document.head.firstChild);
+  }
+
   function el(tag, attrs) {
     var n = document.createElementNS("http://www.w3.org/2000/svg", tag);
     for (var k in attrs) n.setAttribute(k, attrs[k]);
@@ -83,12 +104,14 @@
     this._hover = this.hasAttribute("hover") && !REDUCED;
     this._mode  = REDUCED ? "static" : mode;
 
-    this.style.display = this.style.display || "inline-block";
+    /* display and the fallback width come from the injected base rule, so an
+       author's own `dr-symbol { display: block }` is no longer overridden by
+       an inline style. Writing display:inline-block inline reintroduced the
+       inline-block baseline gap and lifted the mark off the centre its
+       stylesheet asked for: a fixed pixel offset, so it read worse the
+       smaller the mark got. */
+    ensureBaseStyle();
     this.style.aspectRatio = "1";
-    /* default size only when nothing else (inline or stylesheet) sizes it */
-    var cw = getComputedStyle(this).width;
-    if (!this.style.width && (cw === "auto" || parseFloat(cw) === 0))
-      this.style.width = "120px";
 
     var svg = el("svg", { viewBox: "0 0 " + SIZE + " " + SIZE, width: "100%", height: "100%", "aria-hidden": "true" });
     svg.style.display = "block";
@@ -117,17 +140,51 @@
     this._t0 = performance.now();
     this._twist = 0; this._drawP = 1; this._frozen = false;
     this._sw = stroke; this._pulses = []; this._px = 0; this._py = 0;
+    this._hoverEnv = 0; this._cx0 = null; this._cy0 = null;
     this._flowOn = (this._mode === "ambient" || this._mode === "scroll");
 
     if (this._mode === "draw") this._beginDraw();
     if (this._mode === "scroll") this._bindScroll();
-    if (this._hover) this._bindHover();
+    if (this._hover) { this._bindHover(); this._bindResize(); }
     if (this._mode !== "static") this._loop();
   };
 
   DRSymbol.prototype.disconnectedCallback = function () {
     this._dead = true;
     if (this._onScroll) removeEventListener("scroll", this._onScroll);
+    if (this._ro) { this._ro.disconnect(); this._ro = null; }
+    if (this._reflow) {
+      removeEventListener("resize", this._reflow);
+      removeEventListener("orientationchange", this._reflow);
+    }
+  };
+
+  /* ---- keep the geometry honest across resize / orientation change ----
+     The box was only ever read at connect and inside pointermove. A resize,
+     orientation change or layout shift while the pointer sat over the mark
+     left the ring field aimed at a point in the old box, with no pointerleave
+     to clear it, so the rings stayed bent around a spot the cursor was no
+     longer near. Re-project the remembered pointer into the new box, and drop
+     hover outright when the pointer is no longer over the mark. */
+  DRSymbol.prototype._bindResize = function () {
+    var self = this;
+    this._reflow = function () {
+      if (self._dead || !self._hoverActive) return;
+      var r = self.getBoundingClientRect();
+      if (!(r.width > 0 && r.height > 0) || self._cx0 == null) {
+        self._hoverActive = false;
+        return;
+      }
+      var nx = (self._cx0 - r.left) / r.width, ny = (self._cy0 - r.top) / r.height;
+      if (nx < 0 || nx > 1 || ny < 0 || ny > 1) { self._hoverActive = false; return; }
+      self._px = nx * SIZE; self._py = ny * SIZE;
+    };
+    if (window.ResizeObserver) {
+      this._ro = new ResizeObserver(this._reflow);
+      this._ro.observe(this);
+    }
+    addEventListener("resize", this._reflow, { passive: true });
+    addEventListener("orientationchange", this._reflow, { passive: true });
   };
 
   /* ---- reveal: the unfurl ----
@@ -173,14 +230,21 @@
   DRSymbol.prototype._ringField = function (e) {
     /* proximity 0..1 of the pointer to THIS ring — distance from the
        pointer to the ring's ellipse, through a gaussian falloff */
-    if (!this._hoverActive) return 0;
+    /* Gated by the eased hover envelope, not by the raw boolean. The boolean
+       flipped the whole field to 0 in a single frame on pointerleave, so every
+       ring snapped back to its resting angle and its stroke dropped from the
+       hovered weight to the declared one instantly, while the flow speed eased
+       out over ~200ms. That half-snapped, half-eased exit is what reads as the
+       mark dropping into a default state when the pointer comes off it. */
+    var env = this._hoverEnv || 0;
+    if (env < 0.001) return 0;
     var rad = (e._a * Math.PI) / 180;
     var dx = this._px - e._cx, dy = this._py - e._cy;
     var c = Math.cos(rad), s = Math.sin(rad);
     var u = (dx * c + dy * s) / e._rx, v = (-dx * s + dy * c) / e._ry;
     var r = Math.sqrt(u * u + v * v);
     var d = Math.abs(r - 1) * (e._rx + e._ry) / 2;   /* ≈ px distance to ring */
-    return Math.exp(-(d * d) / (2 * 52 * 52));
+    return env * Math.exp(-(d * d) / (2 * 52 * 52));
   };
 
   DRSymbol.prototype._loop = function () {
@@ -191,7 +255,13 @@
       if (!self._frozen) {
         var dt = Math.min(0.1, (now - self._lastNow) / 1000);
         self._lastNow = now;
-        var target = self._hoverActive ? 1.45 : 1;
+        /* One envelope drives shape, weight and speed, so hover enters and
+           leaves as a single motion. Out is slower than in: the mark settles
+           rather than letting go. */
+        var want = self._hoverActive ? 1 : 0;
+        self._hoverEnv += (want - self._hoverEnv) * Math.min(1, dt * (want ? 9 : 5));
+        if (!self._hoverActive && self._hoverEnv < 0.005) self._hoverEnv = 0;
+        var target = 1 + 0.45 * self._hoverEnv;
         self._boost += (target - self._boost) * Math.min(1, dt * 5);
         self._ph += dt * self._speed * self._boost * 2 * Math.PI / 9;
         /* after a draw reveal, the ambient wave fades in over 1.2s — no pop */
@@ -214,8 +284,10 @@
           }
           e.setAttribute("transform",
             "rotate(" + (e._a + wave + tw + rot + pulse) + " " + e._cx + " " + e._cy + ")");
+          /* clear at rest so the <g> stroke-width governs again, never leaving
+             an inline weight pinned on the ring */
           if (self._hover)
-            e.style.strokeWidth = String(self._sw * (1 + 1.25 * g));
+            e.style.strokeWidth = g > 0 ? String(self._sw * (1 + 1.25 * g)) : "";
         }
       }
       requestAnimationFrame(frame);
@@ -240,18 +312,31 @@
   /* ---- hover: parallax tilt + per-ring proximity + click pulse ---- */
   DRSymbol.prototype._bindHover = function () {
     var self = this;
-    this.addEventListener("pointermove", function (ev) {
+    function aim(ev) {
       var r = self.getBoundingClientRect();
-      var nx = (ev.clientX - r.left) / r.width;
-      var ny = (ev.clientY - r.top) / r.height;
-      self._px = nx * SIZE; self._py = ny * SIZE;   /* viewBox coords for the ring field */
+      if (!(r.width > 0 && r.height > 0)) return;
+      /* remembered in client space so a resize can re-project it */
+      self._cx0 = ev.clientX; self._cy0 = ev.clientY;
+      self._px = ((ev.clientX - r.left) / r.width) * SIZE;   /* viewBox coords for the ring field */
+      self._py = ((ev.clientY - r.top) / r.height) * SIZE;
       self._hoverActive = true;
-    });
-    this.addEventListener("pointerleave", function () {
+    }
+    /* pointerenter as well as pointermove: hover used to engage only on a
+       move, so coming back onto the mark and holding the pointer still left
+       it sitting in its plain resting state until the pointer moved again.
+       pointerdown aims too, so a touch tap lands its pulse on the right ring. */
+    this.addEventListener("pointerenter", aim);
+    this.addEventListener("pointermove", aim);
+    function release() {
       self._hoverActive = false;
-      for (var i = 0; i < N; i++) self._rings[i].style.strokeWidth = "";
-    });
-    this.addEventListener("pointerdown", function () {
+      self._cx0 = null; self._cy0 = null;
+      /* stroke is NOT cleared here. The loop eases it back through the
+         envelope and clears it at rest. Clearing it now is the snap. */
+    }
+    this.addEventListener("pointerleave", release);
+    this.addEventListener("pointercancel", release);
+    this.addEventListener("pointerdown", function (ev) {
+      aim(ev);
       self._pulses.push(performance.now());
     });
   };
@@ -264,7 +349,8 @@
   DRSymbol.prototype.debugPointer = function (nx, ny) {
     /* freeze a hover state at normalized pointer (0..1, 0..1) — for stills */
     this._frozen = true;
-    this._px = nx * SIZE; this._py = ny * SIZE; this._hoverActive = true;
+    this._px = nx * SIZE; this._py = ny * SIZE;
+    this._hoverActive = true; this._hoverEnv = 1;   /* full field for a still */
     for (var i = 0; i < N; i++) {
       var e = this._rings[i];
       var g = this._ringField(e);
